@@ -4,20 +4,16 @@ namespace Library;
 
 public class ClientPayload<TClientPacket>
 {
-    [ObfuscateNames]
-    [VirtualizeCode]
-    [ObfuscateControlFlow]
-    public uint GetFixedLength1Int() => GetFixedLengthInt(EncodedInteger.GetFixed1Value, 1);
+    public uint GetFixedLength1Int() => GetFixedLengthInt<uint>(EncodedInteger.GetFixed1Value, 1);
 
+    //FAILS
     [ObfuscateNames]
-    [VirtualizeCode]
-    [ObfuscateControlFlow]
     private TInt GetFixedLengthInt<TInt>(Func<byte[], int, TInt> getFixedLengthInt, int offsetIncrease) =>
-        GetFixedLengthInt((data, startIndex, bigEndian) => getFixedLengthInt(data, offsetIncrease), offsetIncrease, false);
+        getFixedLengthInt(new byte[10], 10);
 
-    [ObfuscateNames]
-    [VirtualizeCode]
-    [ObfuscateControlFlow]
-    private TInt GetFixedLengthInt<TInt>(Func<byte[], int, bool, TInt> getFixedLengthInt, int offsetIncrease, bool bigEndian)
-        => getFixedLengthInt(new byte[10], 10, true); 
+    //WORKS
+    //[ObfuscateNames]
+    //private uint GetFixedLengthInt<TInt>(Func<byte[], int, uint> getFixedLengthInt, int offsetIncrease) =>
+    //    getFixedLengthInt(new byte[10], 10);
+
 }
